@@ -54,8 +54,11 @@ public class NotesController {
 
         var note = noteRepository.findById(id);
         if (note.isEmpty()) {
-            mav.addObject("error", "Note not found");
-            return mav;
+            return new ModelAndView("redirect:/notes");
+        }
+
+        if (note.get().getAuthor().getId() != userRepository.findAuthenticatedUser().get().getId()) {
+            return new ModelAndView("redirect:/notes");
         }
 
         mav.addObject("noteDto", mapToDto(note.get()));
@@ -67,6 +70,11 @@ public class NotesController {
     ModelAndView deleteNote(@PathVariable long id) {
         var mav = new ModelAndView("redirect:/notes");
 
+        var user = userRepository.findAuthenticatedUser();
+        var userNotes = noteRepository.findAllByAuthor(user.get());
+        if (userNotes.stream().noneMatch(n-> n.getAuthor().getId() == user.get().getId())){
+            return mav;
+        }
         noteRepository.deleteById(id);
 
         return mav;
@@ -86,8 +94,13 @@ public class NotesController {
             mav.addObject("error", "Category not found");
             return mav;
         }
+
         var category = categoryOpt.get();
         var note = noteOpt.get();
+
+        if (note.getAuthor().getId() != userRepository.findAuthenticatedUser().get().getId()) {
+            return new ModelAndView("redirect:/notes");
+        }
 
         note.setTitle(noteDto.getTitle());
         note.setContent(noteDto.getContent());
@@ -159,6 +172,9 @@ public class NotesController {
             modelAndView.addObject("error", "Note not found");
             return modelAndView;
         }
+        if (note.get().getAuthor().getId() != userRepository.findAuthenticatedUser().get().getId()) {
+            return new ModelAndView("redirect:/notes");
+        }
 
         NoteDto noteDto = mapToDto(note.get());
 
@@ -195,6 +211,9 @@ public class NotesController {
         if (note.isEmpty()) {
             modelAndView.addObject("error", "Note not found");
             return modelAndView;
+        }
+        if (note.get().getAuthor().getId() != userRepository.findAuthenticatedUser().get().getId()) {
+            return new ModelAndView("redirect:/notes");
         }
         var users = userRepository.findAllById(noteDto.getSharedTo());
         note.get().setSharedTo(users);
