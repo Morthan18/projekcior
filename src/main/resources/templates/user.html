@@ -3,44 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
 <body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
+<div th:text="${userDto.id}"></div>
+<div th:text="${userDto.firstName}"></div>
+<div th:text="${userDto.lastName}"></div>
+<div th:text="${userDto.age}"></div>
+<div th:text="${userDto.role}"></div>
 
-<div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
-    <div class="card-body p-4">
-        <h3 class="card-title text-center">Dodaj kategorię</h3>
-        <form th:object="${userDto}" th:action="@{'/admin/users/' + ${userDto.id} + '/update'}" method="post">
-            <div class="mb-3">
-                <label for="firstName" class="form-label">Nazwa kategori</label>
-                <input readonly th:value="${userDto.firstName}" type="text" class="form-control" id="firstName" name="firstName">
-            </div>
-            <div class="mb-3">
-                <label for="lastName" class="form-label">Nazwa kategori</label>
-                <input readonly th:value="${userDto.lastName}" type="text" class="form-control" id="lastName" name="lastName">
-            </div>
-            <div class="mb-3">
-                <label for="age" class="form-label">Nazwa kategori</label>
-                <input readonly th:value="${userDto.age}" type="number" class="form-control" id="age" name="age">
-            </div>
-            <div class="mb-3">
-                <select th:field="*{role}" class="form-control" id="dropDownList">
+<form th:object="${userDto}" th:action="@{'/admin/users/' + ${userDto.id} + '/update'}" method="post">
+    <select th:field="*{role}" class="form-control" id="dropDownList">
 
-                    <option
-                            th:each="role : ${allRoles}"
-                            th:value="${role}"
-                            th:text="${role}"
-                            th:selected="${role == userDto.role}"
-                    ></option>
-                </select>
-            </div>
-            <p class="text-danger" th:text="${error}"></p>
-            <div class="d-flex justify-content-end">
-                <input class="btn btn-primary mt-4"  type="submit" value="Dodaj" />
-            </div>
-        </form>
-    </div>
-</div>
+        <option
+                th:each="role : ${allRoles}"
+                th:value="${role}"
+                th:text="${role}"
+                th:selected="${role == userDto.role}"
+        ></option>
+    </select>
+    <input type="submit" value="Save Role">
+</form>
 
 
 </body>

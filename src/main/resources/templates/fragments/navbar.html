@@ -14,13 +14,13 @@
                         th:class="${#httpServletRequest.requestURI}=='/' ? 'nav-link active' : 'nav-link'"
                     >Home</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_FULL_USER') || hasRole('ROLE_ADMIN')">
+                <li class="nav-item">
                     <a
                             th:href="@{/notes}"
                         th:class="${#httpServletRequest.requestURI}=='/notes' ? 'nav-link active' : 'nav-link'"
                     >Notatki</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_FULL_USER') || hasRole('ROLE_ADMIN')">
+                <li class="nav-item">
                     <a
                             th:href="@{/categories}"
                             th:class="${#httpServletRequest.requestURI}=='/categories' ? 'nav-link active' : 'nav-link'"
@@ -32,11 +32,11 @@
                         th:class="${#httpServletRequest.requestURI}=='/admin' ? 'nav-link active' : 'nav-link'"
                     >Użytkownicy</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_LIMITED_USER') || hasRole('ROLE_FULL_USER') || hasRole('ROLE_ADMIN')">
+                <li class="nav-item">
                     <a
                         th:href="@{/notes/shared-for-me}"
                         th:class="${#httpServletRequest.requestURI}=='/notes/shared-for-me' ? 'nav-link active' : 'nav-link'"
-                    >Udostepnione</a>
+                    >Udostepnione notatki dla mnie ok</a>
                 </li>
             </ul>
             <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-outline-primary mx-2">Logowanie</a>

@@ -21,19 +21,45 @@
             <th scope="col">Użytkownik</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="note, i: ${sharedNotes}">
+        <tbody id="tbody">
+<!--        <tr th:each="note, i: ${sharedNotes}">
             <td th:text="${i.index}" />
             <td th:text="${note.title}" />
             <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis"  th:text="${note.content}"/>
             <td  th:text="${note.category.name}"/>
             <td  th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}"/>
             <td  th:text="${note.author.firstName}+' '+${note.author.lastName}"/>
-        </tr>
+        </tr>-->
         </tbody>
     </table>
 </div>
 </div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    const sharedNotes = /*[[${sharedNotes}]]*/ 'default';
+    const temporals = /*[[${temporals}]]*/ 'default';
+    const content = ``;
+
+    const getTemplate = (note, index) => {
+        return `<tr>
+            <td>${index}</td>
+            <td>${note.title}</td>
+            <td>${note.content}</td>
+            <td>${note.category.name}</td>
+            <td></td>
+            <td>${note.author.firstName}+' '+${note.author.lastName}</td>
+        </tr>`
+    }
+
+    sharedNotes.forEach((note, i)=>{
+        const el = getTemplate(note, i)
+        document.getElementById('tbody').insertAdjacentHTML("afterend", el)
+    })
+
+    console.log(template)
+</script>
 
 </body>
 </html>
