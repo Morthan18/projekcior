@@ -5,22 +5,24 @@
     <title>Title</title>
 </head>
 <body>
-<div th:text="${user.id}"></div>
-<div th:text="${user.firstName}"></div>
-<div th:text="${user.lastName}"></div>
-<div th:text="${user.age}"></div>
-<div th:text="${user.role}"></div>
+<div th:text="${userDto.id}"></div>
+<div th:text="${userDto.firstName}"></div>
+<div th:text="${userDto.lastName}"></div>
+<div th:text="${userDto.age}"></div>
+<div th:text="${userDto.role}"></div>
 
-    <select class="form-control" id="dropDownList">
+<form th:object="${userDto}" th:action="@{'/admin/users/' + ${userDto.id} + '/update'}" method="post">
+    <select th:field="*{role}" class="form-control" id="dropDownList">
 
         <option
                 th:each="role : ${allRoles}"
                 th:value="${role}"
                 th:text="${role}"
-                th:selected="${role == user.role}"
+                th:selected="${role == userDto.role}"
         ></option>
     </select>
     <input type="submit" value="Save Role">
+</form>
 
 
 </body>
