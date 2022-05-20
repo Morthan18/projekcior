@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
+</head>
+<body>
+<div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
+    <div class="card-body p-4">
+        <h3 class="card-title text-center">Rejestracja</h3>
+
+        <form id="form" th:action="@{/notes/{id}(id = ${noteDto.id})}" th:object="${noteDto}" method="POST" enctype="utf8">
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Tytuł</label>
+                <input th:field="*{title}"
+                       type="text" class="form-control" id="title"
+                       autofocus="autofocus">
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">Treść</label>
+                <input th:field="*{content}"
+                       type="text" class="form-control" id="content"
+                       autofocus="autofocus">
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label">Kategoria</label>
+                <select th:field="*{categoryId}" class="form-control" id="category">
+
+                    <option
+                            th:each="category : ${allCategories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}"
+                            th:selected="${category == noteDto.category}"
+                    ></option>
+                </select>
+            </div>
+
+
+            <p class="text-danger" th:text="${error}"></p>
+
+
+            <div class="d-flex justify-content-end">
+                <input class="btn btn-primary mt-4"  type="submit" value="Edytuj" />
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</body>
+</html>

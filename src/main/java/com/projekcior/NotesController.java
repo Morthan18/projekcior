@@ -48,6 +48,47 @@ public class NotesController {
         return mav;
     }
 
+    @GetMapping("/notes/{id}")
+    ModelAndView getNote(@PathVariable long id) {
+        var mav = new ModelAndView("editNote");
+
+        var note = noteRepository.findById(id);
+        if (note.isEmpty()) {
+            mav.addObject("error", "Note not found");
+            return mav;
+        }
+
+        mav.addObject("noteDto", mapToDto(note.get()));
+        mav.addObject("allCategories", categoryRepository.findAll());
+        return mav;
+    }
+
+    @PostMapping("/notes/{id}")
+    ModelAndView updateNote(@PathVariable long id, @ModelAttribute NoteDto noteDto) {
+        var mav = new ModelAndView("editNote");
+
+        var noteOpt = noteRepository.findById(id);
+        if (noteOpt.isEmpty()) {
+            mav.addObject("error", "Note not found");
+            return mav;
+        }
+        var categoryOpt = categoryRepository.findById(noteDto.getCategoryId());
+        if (categoryOpt.isEmpty()) {
+            mav.addObject("error", "Category not found");
+            return mav;
+        }
+        var category = categoryOpt.get();
+        var note = noteOpt.get();
+
+        note.setTitle(noteDto.getTitle());
+        note.setContent(noteDto.getContent());
+        note.setCategory(category);
+
+        noteRepository.save(note);
+        mav = new ModelAndView("redirect:/notes");
+        return mav;
+    }
+
     @GetMapping("/notes/external-link/{id}")
     ModelAndView getNotes(@PathVariable long id) {
         var mav = new ModelAndView("externalNote");
