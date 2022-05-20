@@ -10,6 +10,7 @@
 <p th:if="${param.keySet().contains('error')}" class="error">Wrong user or password</p>
 
 
+
 <form th:action="@{/login.html}" method="post">
     <label for="username">Username</label>:
     <input type="text" id="username" name="username" autofocus="autofocus" /> <br />

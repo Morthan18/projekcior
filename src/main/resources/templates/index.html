@@ -7,7 +7,6 @@
 </head>
 <body>
 
-
 <p th:utext="${message}"></p>
 
 <div class="container">
@@ -27,6 +26,11 @@
 <div sec:authorize="hasRole('ROLE_ADMIN')">
     <a href="index.html" th:href="@{/admin}">Admin Page</a>
 </div>
+
+<div sec:authorize="!isAuthenticated()">
+    <a href="index.html" th:href="@{/login}">Login</a>
+</div>
+
 
 <p th:utext="${#authentication}"></p>
 

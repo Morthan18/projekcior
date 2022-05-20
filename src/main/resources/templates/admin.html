@@ -7,5 +7,18 @@
 <body>
 <a href="index.html" th:href="@{/}">main Page</a>
 
+
+
+    <div th:each="user : ${users}">
+
+        <div th:text="${user.id}"></div>
+        <div th:text="${user.firstName}"></div>
+        <div th:text="${user.lastName}"></div>
+        <div th:text="${user.age}"></div>
+        <br><br>
+    </div>
+    <input type="submit" value="Save All">
+
+
 </body>
 </html>
