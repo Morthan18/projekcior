@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -22,6 +22,10 @@
             One of three columns
         </div>
     </div>
+</div>
+
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a href="index.html" th:href="@{/admin}">Admin Page</a>
 </div>
 
 <p th:utext="${#authentication}"></p>

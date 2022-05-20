@@ -7,7 +7,7 @@
 <div th:fragment="notes">
     <div class="container">
        NOTATKI
-<br>
+
         <tr th:each="note: ${notes}">
             <td th:text="${note.id}" />
             <td th:text="${note.title}" />

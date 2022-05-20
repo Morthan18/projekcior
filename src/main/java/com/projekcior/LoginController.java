@@ -44,6 +44,11 @@ public class LoginController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @RequestMapping("/login.html")
+    public String loginHtml() {
+        return "login";
+    }
+
     @RequestMapping("/login")
     public String login() {
         return "login";
@@ -53,7 +58,7 @@ public class LoginController {
     @RequestMapping("/login-error")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
-        return "redirect:/login";
+        return "login";
     }
 
     @GetMapping("/register")
