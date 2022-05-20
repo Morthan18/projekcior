@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.provisioning.UserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,7 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/admin**").hasRole("ADMIN")
+                .authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.POST, "/categories**", "/notes/**").hasAnyRole("FULL_USER", "ADMIN")
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/create-category").hasAnyRole("FULL_USER", "ADMIN")
                 .and()
                 .authorizeRequests().antMatchers(
                         "/",
@@ -52,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
                 .and()
                 .anonymous()
                 .and()
-                .authorizeRequests().anyRequest().authenticated()
+                .authorizeRequests().anyRequest().hasAnyRole("LIMITED_USER", "FULL_USER", "ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/login.html")

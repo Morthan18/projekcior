@@ -117,8 +117,7 @@ public class NotesController {
 
         var note = noteRepository.findById(id);
         if (note.isEmpty()) {
-            mav.addObject("error", "Note not found");
-            return mav;
+            return new ModelAndView("redirect:/");
         }
 
         mav.addObject("noteDto", mapToDto(note.get()));
