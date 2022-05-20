@@ -1,28 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
+    <style>
+        .selected {
+            background-color: #5993e7;
+            color: #fff;
+        }
+    </style>
 </head>
-<body>
+<body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
+<div th:insert="fragments/navbar :: navbar"></div>
 
-<p th:text="${noteDto.title}"></p>
-<p th:text="${noteDto.content}"></p>
+<div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
+    <div class="card-body p-4" >
+        <h3 class="card-title text-center pb-4">Udostępnij</h3>
+        <p style="font-weight: 500; text-align:center; font-size: 1.3em;" th:text="${noteDto.title}"></p>
+        <p th:text="${noteDto.content}"></p>
 
+        <form class="pt-3" th:object="${noteDto}" th:action="@{'/notes/share-note/' + ${noteDto.id}}" method="post">
+            <h5>Użytkownicy:</h5>
+            <div class="mb-3" style="max-height: 300px; overflow-y: auto">
 
-<form th:object="${noteDto}" th:action="@{'/notes/share-note/' + ${noteDto.id}}" method="post">
-    <p>
-        <label>Users:
-            <input type="checkbox" name="sharedTo"
-                   th:each="user : ${users}"
-                   th:text="@{${user.firstName} + ${user.lastName}}"
-                   th:value="${user.id}"
-                   th:field="*{sharedTo}"
-            />
-        </label>
-    </p>
-    <input type="submit" value="Share">
-</form>
+                <ul class="list-group">
+                    <li th:id="'user-'+${user.id}" class="list-group-item" th:each="user : ${users}">
+                        <input style="cursor: pointer" onchange="selectOption(event)" type="checkbox" name="sharedTo"
+                               th:value="${user.id}"
+                               th:field="*{sharedTo}"
+                        />
+                        <span th:text="@{${user.firstName} + ${user.lastName}}"></span>
+                    </li>
+                </ul>
+
+            </div>
+            <p class="text-danger" th:text="${error}"></p>
+            <div class="d-flex justify-content-end">
+                <input class="btn btn-primary mt-4" type="submit" value="Dodaj"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    const users = /*[[${users}]]*/ 'default';
+    const sharedTo = /*[[${sharedTo}]]*/ 'default';
+    const noteDto = /*[[${noteDto}]]*/ 'default';
+    console.log(sharedTo)
+    console.log(noteDto)
+
+    window.onload = load;
+
+    function load() {
+        noteDto.sharedTo.forEach(id => {
+            const input = document.getElementById('user-' + id)
+            input.classList.add('selected')
+        })
+    }
+
+    window.onload(() => {
+
+    })
+
+    const selectOption = (e) => {
+        const checked = e.target.checked
+        const id = e.target.value
+        const input = document.getElementById('user-' + id)
+        if (checked) {
+            input.classList.add('selected')
+        } else {
+            input.classList.remove('selected')
+        }
+    }
+    /*]]>*/
+</script>
+
 
 </body>
 </html>

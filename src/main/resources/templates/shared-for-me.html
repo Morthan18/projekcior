@@ -3,14 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
-<body>
+<body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
+<div th:insert="fragments/navbar :: navbar"></div>
 
-<div class="col-6 offset-3">
-    <ul class="list-group">
-        <li th:each="note: ${sharedNotes}" th:text="${note.content}" class="list-group-item">
-        </li>
-    </ul>
+<div class="p-5">
+<div style="border: 1px solid #cecece; border-radius: 12px; overflow: hidden" class="bg-white">
+    <table class="table m-0">
+        <thead>
+        <tr>
+            <th class="px-3" scope="col">#</th>
+            <th scope="col">Tytuł</th>
+            <th scope="col">Treść</th>
+            <th scope="col">Kategoria</th>
+            <th scope="col">Data dodania</th>
+            <th scope="col">Użytkownik</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="note, i: ${sharedNotes}">
+            <td th:text="${i.index}" />
+            <td th:text="${note.title}" />
+            <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis"  th:text="${note.content}"/>
+            <td  th:text="${note.category.name}"/>
+            <td  th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}"/>
+            <td  th:text="${note.author.firstName}+' '+${note.author.lastName}"/>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </div>
 
 </body>

@@ -30,7 +30,7 @@
                     <tr th:each="note, i: ${notes}">
                         <td th:text="${i.index}" />
                         <td th:text="${note.title}" />
-                        <td th:text="${note.content}" />
+                        <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis" th:text="${note.content}" />
                         <td th:text="${note.category.name}" />
                         <td th:text="${note.link}" />
                         <td th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}" />
