@@ -7,8 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,7 +42,23 @@ public class NotesController {
         var mav = new ModelAndView("notes");
         var user = userRepository.findAuthenticatedUser().get();
 
-        mav.addObject("notes", noteRepository.findAllByAuthor(user));
+        mav.addObject("notes", noteRepository.findAllByAuthor(user).stream()
+                .map(this::mapToDto)
+                .toList());
+        return mav;
+    }
+
+    @GetMapping("/notes/external-link/{id}")
+    ModelAndView getNotes(@PathVariable long id) {
+        var mav = new ModelAndView("externalNote");
+
+        var note = noteRepository.findById(id);
+        if (note.isEmpty()) {
+            mav.addObject("error", "Note not found");
+            return mav;
+        }
+
+        mav.addObject("noteDto", mapToDto(note.get()));
         return mav;
     }
 
@@ -91,12 +110,7 @@ public class NotesController {
             return modelAndView;
         }
 
-        var noteDto = new NoteDto();
-        noteDto.setId(note.get().getId());
-        noteDto.setTitle(note.get().getTitle());
-        noteDto.setContent(note.get().getContent());
-        noteDto.setCategoryId(note.get().getCategory().getId());
-        noteDto.setSharedTo(note.get().getSharedTo().stream().map(User::getId).collect(Collectors.toSet()));
+        NoteDto noteDto = mapToDto(note.get());
 
         modelAndView.addObject("noteDto", noteDto);
         modelAndView.addObject("users", userRepository.findAll()
@@ -106,6 +120,21 @@ public class NotesController {
         );
 
         return modelAndView;
+    }
+
+    private NoteDto mapToDto(Note note) {
+        var baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+
+        var noteDto = new NoteDto();
+        noteDto.setId(note.getId());
+        noteDto.setTitle(note.getTitle());
+        noteDto.setContent(note.getContent());
+        noteDto.setCategory(note.getCategory());
+        noteDto.setCategoryId(note.getCategory().getId());
+        noteDto.setLink(baseUrl + "/notes/external-link/" + note.getId());
+        noteDto.setSharedTo(note.getSharedTo().stream().map(User::getId).collect(Collectors.toSet()));
+        noteDto.setCreationDate(LocalDate.now());
+        return noteDto;
     }
 
     @PostMapping("/notes/share-note/{id}")
@@ -132,8 +161,11 @@ public class NotesController {
         long id;
         String title;
         String content;
+        Category category;
         long categoryId;
+        String link;
         Set<Long> sharedTo;
+        LocalDate creationDate;
     }
 
 }

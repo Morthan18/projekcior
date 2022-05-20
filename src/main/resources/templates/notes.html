@@ -30,6 +30,7 @@
                         <td th:text="${note.title}" />
                         <td th:text="${note.content}" />
                         <td th:text="${note.category.name}" />
+                        <td th:text="${note.link}" />
                         <td th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}" />
                         <td><a th:href="@{/notes/share-note/{id}(id = ${note.id})}" class="btn btn-light">Udostepnij komus se</a></td>
                         <td></td>
