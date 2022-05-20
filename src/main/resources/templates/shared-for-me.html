@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="col-6 offset-3">
+    <ul class="list-group">
+        <li th:each="note: ${sharedNotes}" th:text="${note.content}" class="list-group-item">
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

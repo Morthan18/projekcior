@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -68,15 +70,70 @@ public class NotesController {
         ));
 
         var mav = new ModelAndView("redirect:/notes");
-        mav.addObject("notes", noteRepository.findAll());
+        mav.addObject("notes", noteRepository.findAllByAuthor(userRepository.findAuthenticatedUser().get()));
         return mav;
     }
 
+    @GetMapping("/notes/shared-for-me")
+    ModelAndView getSharedForMe() {
+        var modelAndView = new ModelAndView("shared-for-me");
+        modelAndView.addObject("sharedNotes", noteRepository.findAllBySharedToContains(userRepository.findAuthenticatedUser().get()));
+        return modelAndView;
+    }
+
+    @GetMapping("/notes/share-note/{id}")
+    ModelAndView shareNote(@PathVariable long id) {
+        var modelAndView = new ModelAndView("share-note");
+
+        var note = noteRepository.findById(id);
+        if (note.isEmpty()) {
+            modelAndView.addObject("error", "Note not found");
+            return modelAndView;
+        }
+
+        var noteDto = new NoteDto();
+        noteDto.setId(note.get().getId());
+        noteDto.setTitle(note.get().getTitle());
+        noteDto.setContent(note.get().getContent());
+        noteDto.setCategoryId(note.get().getCategory().getId());
+        noteDto.setSharedTo(note.get().getSharedTo().stream().map(User::getId).collect(Collectors.toSet()));
+
+        modelAndView.addObject("noteDto", noteDto);
+        modelAndView.addObject("users", userRepository.findAll()
+                .stream()
+                .filter(u -> !u.getUsername().equals(AuthUserHelper.getAuthenticatedUsername()))
+                .collect(Collectors.toList())
+        );
+
+        return modelAndView;
+    }
+
+    @PostMapping("/notes/share-note/{id}")
+    ModelAndView shareNote(@PathVariable long id, @ModelAttribute NoteDto noteDto) {
+        var modelAndView = new ModelAndView("share-note");
+
+        var note = noteRepository.findById(id);
+        if (note.isEmpty()) {
+            modelAndView.addObject("error", "Note not found");
+            return modelAndView;
+        }
+        var users = userRepository.findAllById(noteDto.getSharedTo());
+        note.get().setSharedTo(users);
+        noteRepository.save(note.get());
+
+        var mav = new ModelAndView("redirect:/notes");
+        mav.addObject("notes", noteRepository.findAllByAuthor(userRepository.findAuthenticatedUser().get()));
+        return mav;
+    }
+
+
     @Data
     class NoteDto {
+        long id;
         String title;
         String content;
         long categoryId;
+        Set<Long> sharedTo;
     }
 
 }

@@ -32,6 +32,12 @@
                         th:class="${#httpServletRequest.requestURI}=='/admin' ? 'nav-link active' : 'nav-link'"
                     >Użytkownicy</a>
                 </li>
+                <li class="nav-item">
+                    <a
+                        th:href="@{/notes/shared-for-me}"
+                        th:class="${#httpServletRequest.requestURI}=='/notes/shared-for-me' ? 'nav-link active' : 'nav-link'"
+                    >Udostepnione notatki dla mnie ok</a>
+                </li>
             </ul>
             <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-outline-primary mx-2">Logowanie</a>
             <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="btn btn-outline-primary mx-2">Wyloguj</a>

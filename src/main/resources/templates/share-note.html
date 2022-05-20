@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<p th:text="${noteDto.title}"></p>
+<p th:text="${noteDto.content}"></p>
+
+
+<form th:object="${noteDto}" th:action="@{'/notes/share-note/' + ${noteDto.id}}" method="post">
+    <p>
+        <label>Users:
+            <input type="checkbox" name="sharedTo"
+                   th:each="user : ${users}"
+                   th:text="@{${user.firstName} + ${user.lastName}}"
+                   th:value="${user.id}"
+                   th:field="*{sharedTo}"
+            />
+        </label>
+    </p>
+    <input type="submit" value="Share">
+</form>
+
+</body>
+</html>

@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
                 .authorizeRequests().antMatchers(
                         "/",
                         "/bootstrap/**",
+                        "/img/**",
                         "/login.html",
                         "/login",
                         "/register").permitAll()
