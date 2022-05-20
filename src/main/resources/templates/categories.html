@@ -8,13 +8,17 @@
 <body>
 <div th:insert="fragments/navbar :: navbar"></div>
 
-        <tr th:each="category: ${categories}">
-            <td th:text="${category.id}" />
-            <td th:text="${category.name}" />
-            <br><br>
-        </tr>
+<div class="col-6 offset-3 d-flex justify-content-end pt-4 pb-3">
+    <a class="btn btn-primary" th:href="@{/create-category}">Dodaj</a>
+</div>
 
-        <a th:href="@{/create-category}">Add category</a>
+
+<div class="col-6 offset-3">
+    <ul class="list-group">
+        <li th:each="category: ${categories}" th:text="${category.name}" class="list-group-item">
+        </li>
+    </ul>
+</div>
 
 </body>
 </html>

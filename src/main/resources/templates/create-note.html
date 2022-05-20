@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
 <body>
-<form th:object="${noteDto}" th:action="@{/notes}" method="post">
+<div th:insert="fragments/navbar :: navbar"></div>
+
+<!--<form th:object="${noteDto}" th:action="@{/notes}" method="post">
     <label for="title">Title</label>:
     <input th:field="*{title}" type="text" id="title" name="title" autofocus="autofocus" /> <br />
     <label for="content">Content</label>:
@@ -21,9 +22,42 @@
     </select>
 
 
-</form>
+</form>-->
 
 
-<p th:text="${error}"></p>
+<div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
+    <div class="card-body p-4">
+        <h3 class="card-title text-center">Dodaj notatkę</h3>
+        <form th:object="${noteDto}" th:action="@{/notes}" method="post">
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Tytuł</label>
+                <input th:field="*{title}" type="text" class="form-control" id="title" name="title" autofocus="autofocus">
+            </div>
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Treść</label>
+                <textarea th:field="*{content}" type="text" class="form-control" id="content" name="content" autofocus="autofocus"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label">Nazwa kategori</label>
+                <select th:field="*{categoryId}" class="form-control" id="category" name="category">
+                    <option
+                            th:each="category : ${categories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}"
+                    ></option>
+                </select>
+            </div>
+
+            <p class="text-danger"  th:text="${error}"></p>
+            <div class="d-flex justify-content-end">
+                <input class="btn btn-primary mt-4"  type="submit" value="Dodaj" />
+            </div>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

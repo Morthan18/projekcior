@@ -6,20 +6,36 @@
 <body>
 <div th:insert="fragments/navbar :: navbar"></div>
 
-    <div class="container">
-       NOTATKI
-<br>
-        <tr th:each="note: ${notes}">
-            <td th:text="${note.id}" />
-            <td th:text="${note.title}" />
-            <td th:text="${note.content}" />
-            <td th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}" />
-            <td th:text="${note.category.name}" />
-            <br><br>
-        </tr>
+        <div class="p-5">
 
+            <div class="d-flex justify-content-end pb-3">
+                <a class="btn btn-primary" th:href="@{/create-note}">Dodaj</a>
+            </div>
 
-        <a th:href="@{/create-note}">Add Note</a>
-    </div>
+            <div style="border: 1px solid #cecece; border-radius: 12px; overflow: hidden">
+                <table class="table m-0">
+                    <thead>
+                    <tr>
+                        <th class="px-3" scope="col">#</th>
+                        <th scope="col">Tytuł</th>
+                        <th scope="col">Treść</th>
+                        <th scope="col">Kategoria</th>
+                        <th scope="col">Data dodania</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="note, i: ${notes}">
+                        <td th:text="${i.index}" />
+                        <td th:text="${note.title}" />
+                        <td th:text="${note.content}" />
+                        <td th:text="${note.category.name}" />
+                        <td th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}" />
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 </body>
 </html>

@@ -3,13 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
 <body>
-<form th:object="${categoryDto}" th:action="@{/categories}" method="post">
-    <label for="name">Name</label>:
-    <input th:field="*{name}" type="text" id="name" name="name" autofocus="autofocus" /> <br />
-    <input type="submit" value="Save category" />
-</form>
-<p th:text="${error}"></p>
+<div th:insert="fragments/navbar :: navbar"></div>
+
+
+<div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
+    <div class="card-body p-4">
+        <h3 class="card-title text-center">Dodaj kategorię</h3>
+        <form th:object="${categoryDto}" th:action="@{/categories}" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nazwa kategori</label>
+                <input th:field="*{name}" type="text" class="form-control" id="name" name="name" autofocus="autofocus">
+            </div>
+            <p class="text-danger" th:text="${error}"></p>
+            <div class="d-flex justify-content-end">
+                <input class="btn btn-primary mt-4"  type="submit" value="Dodaj" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
 </body>
 </html>
