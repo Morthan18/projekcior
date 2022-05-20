@@ -1,8 +1,6 @@
 package com.projekcior;
 
-import com.projekcior.model.Authority;
-import com.projekcior.model.User;
-import com.projekcior.model.UserRepository;
+import com.projekcior.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
@@ -35,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
 
     private final DataSource dataSource;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final NoteRepository noteRepository;
 
 
     @Override
@@ -83,9 +83,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
-            userRepository.save(new User("Krzycho", "Snobko", "krzycho_jp_3000_PL", passwordEncoder().encode("123"), 24, new Authority("krzycho_jp_3000_PL", "ROLE_FULL_USER")));
-            userRepository.save(new User("Krzycho", "ADMIN", "ADMINOS", passwordEncoder().encode("123"), 24, new Authority("ADMINOS", "ROLE_ADMIN")));
-            userRepository.save(new User("Krzycho", "Ograniczony ;/", "retarded", passwordEncoder().encode("123"), 24, new Authority("retarded", "ROLE_LIMITED_USER")));
+            var user = userRepository.save(new User("Krzycho", "Snobko", "krzycho_jp_3000_PL", passwordEncoder().encode("123"), 24, new Authority("krzycho_jp_3000_PL", "ROLE_FULL_USER")));
+            var admin = userRepository.save(new User("Krzycho", "ADMIN", "ADMINOS", passwordEncoder().encode("123"), 24, new Authority("ADMINOS", "ROLE_ADMIN")));
+            var retard = userRepository.save(new User("Krzycho", "Ograniczony ;/", "retarded", passwordEncoder().encode("123"), 24, new Authority("retarded", "ROLE_LIMITED_USER")));
+
+            var category = categoryRepository.save(new Category("Ciekawostki"));
+            categoryRepository.save(new Category("Lista zakupuw"));
+
+            noteRepository.save(new Note("Kura",
+                    "Kury mają doskonałą pamięć. Potrafią zapamiętać i rozróżnić ponad 100 twarzy innych kur oraz rozpoznać je nawet po kilku miesiącach rozłąki..",
+                    category, user, List.of(admin)));
+
+            noteRepository.save(new Note("Ważne ogłoszenie",
+                    "Legia to kurczak",
+                    category, user, List.of(admin, retard)));
         }
     }
 }

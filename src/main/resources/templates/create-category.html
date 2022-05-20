@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:object="${categoryDto}" th:action="@{/categories}" method="post">
+    <label for="name">Name</label>:
+    <input th:field="*{name}" type="text" id="name" name="name" autofocus="autofocus" /> <br />
+    <input type="submit" value="Save category" />
+</form>
+<p th:text="${error}"></p>
+</body>
+</html>

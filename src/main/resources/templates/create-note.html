@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:object="${noteDto}" th:action="@{/notes}" method="post">
+    <label for="title">Title</label>:
+    <input th:field="*{title}" type="text" id="title" name="title" autofocus="autofocus" /> <br />
+    <label for="content">Content</label>:
+    <input th:field="*{content}" type="text" id="content" name="content" autofocus="autofocus" /> <br />
+    <input type="submit" value="Save Note" />
+
+    <select th:field="*{categoryId}" class="form-control" id="dropDownList">
+        <option
+                th:each="category : ${categories}"
+                th:value="${category.id}"
+                th:text="${category.name}"
+        ></option>
+    </select>
+
+
+</form>
+
+
+<p th:text="${error}"></p>
+</body>
+</html>

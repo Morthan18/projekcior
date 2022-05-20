@@ -4,7 +4,7 @@
 
 </head>
 <body>
-<div th:fragment="notes">
+
     <div class="container">
        NOTATKI
 <br>
@@ -16,7 +16,9 @@
             <td th:text="${note.category.name}" />
             <br><br>
         </tr>
+
+
+        <a th:href="@{/create-note}">Add Note</a>
     </div>
-</div>
 </body>
 </html>

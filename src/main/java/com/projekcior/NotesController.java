@@ -1,41 +1,75 @@
 package com.projekcior;
 
-import com.projekcior.model.Category;
-import com.projekcior.model.Note;
+import com.projekcior.model.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
 public class NotesController {
+
+    private final NoteRepository noteRepository;
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @RequestMapping("/")
     public ModelAndView index() {
         ModelAndView mav = new ModelAndView("index");
-        var allNotes = getAllNotes();
-        mav.addObject("notes", allNotes);
+
         return mav;
     }
 
-    @RequestMapping(value = "notes", method = RequestMethod.GET)
-    public ModelAndView messages() {
-        ModelAndView mav = new ModelAndView("notes");
-        var allNotes = getAllNotes();
-        mav.addObject("notes", allNotes);
+    @GetMapping("/notes")
+    ModelAndView getNotes() {
+        var mav = new ModelAndView("notes");
+        var user = userRepository.findAuthenticatedUser().get();
+
+        mav.addObject("notes", noteRepository.findAllByAuthor(user));
         return mav;
     }
 
-    private List<Note> getAllNotes() {
-        return List.of(
-                new Note(UUID.randomUUID(), "Ważne ogłoszenie", "Legia to kurczak.", LocalDate.now(), new Category(UUID.randomUUID(), "Sport")),
-                new Note(UUID.randomUUID(), "Ciekawostka",
-                        "Kury mają doskonałą pamięć. Potrafią zapamiętać i rozróżnić ponad 100 twarzy innych kur oraz rozpoznać je nawet po kilku miesiącach rozłąki..",
-                        LocalDate.now(), new Category(UUID.randomUUID(), "Rolnictwo"))
-        );
+    @GetMapping("/create-note")
+    String addNote(Model model) {
+        model.addAttribute("noteDto", new NoteDto());
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "create-note";
     }
+
+    @PostMapping("/notes")
+    ModelAndView addNote(@ModelAttribute NoteDto noteDto) {
+        var category = categoryRepository.findById(noteDto.getCategoryId());
+        if (category.isEmpty()) {
+            var mav = new ModelAndView("create-note");
+            mav.addObject("error", "Category doesnt exist");
+            return mav;
+        }
+        var user = userRepository.findAuthenticatedUser();
+
+
+        noteRepository.save(new Note(
+                noteDto.getTitle(),
+                noteDto.getContent(),
+                category.get(),
+                user.get(),
+                List.of()
+        ));
+
+        var mav = new ModelAndView("notes");
+        mav.addObject("notes", noteRepository.findAll());
+        return mav;
+    }
+
+    @Data
+    class NoteDto {
+        String title;
+        String content;
+        long categoryId;
+    }
+
 }
