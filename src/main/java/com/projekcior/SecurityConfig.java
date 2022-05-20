@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
                         "/",
                         "/bootstrap/**",
                         "/login.html",
+                        "/login",
                         "/register").permitAll()
                 .and()
                 .anonymous()
@@ -71,10 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.jdbcAuthentication().dataSource(dataSource)
-                .withUser("user").password(passwordEncoder().encode("user")).roles("USER")
-                .and()
-                .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
+        builder.jdbcAuthentication().dataSource(dataSource);
     }
 
     @Bean
