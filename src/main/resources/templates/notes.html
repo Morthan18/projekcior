@@ -3,7 +3,7 @@
 <head>
     <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
-<body>
+<body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
 <div th:insert="fragments/navbar :: navbar"></div>
 
         <div class="p-5">
@@ -12,7 +12,7 @@
                 <a class="btn btn-primary" th:href="@{/create-note}">Dodaj</a>
             </div>
 
-            <div style="border: 1px solid #cecece; border-radius: 12px; overflow: hidden">
+            <div style="border: 1px solid #cecece; border-radius: 12px; overflow: hidden" class="bg-white">
                 <table class="table m-0">
                     <thead>
                     <tr>

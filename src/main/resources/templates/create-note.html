@@ -3,27 +3,8 @@
 <head>
     <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
-<body>
+<body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
 <div th:insert="fragments/navbar :: navbar"></div>
-
-<!--<form th:object="${noteDto}" th:action="@{/notes}" method="post">
-    <label for="title">Title</label>:
-    <input th:field="*{title}" type="text" id="title" name="title" autofocus="autofocus" /> <br />
-    <label for="content">Content</label>:
-    <input th:field="*{content}" type="text" id="content" name="content" autofocus="autofocus" /> <br />
-    <input type="submit" value="Save Note" />
-
-    <select th:field="*{categoryId}" class="form-control" id="dropDownList">
-        <option
-                th:each="category : ${categories}"
-                th:value="${category.id}"
-                th:text="${category.name}"
-        ></option>
-    </select>
-
-
-</form>-->
-
 
 <div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
     <div class="card-body p-4">

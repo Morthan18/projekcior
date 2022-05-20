@@ -25,6 +25,13 @@ public class NotesController {
         return mav;
     }
 
+    @RequestMapping("/successLogin")
+    public ModelAndView successLogin() {
+        ModelAndView mav = new ModelAndView("redirect:/");
+
+        return mav;
+    }
+
     @GetMapping("/notes")
     ModelAndView getNotes() {
         var mav = new ModelAndView("notes");
