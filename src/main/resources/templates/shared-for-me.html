@@ -14,22 +14,14 @@
         <thead>
         <tr>
             <th class="px-3" scope="col">#</th>
-            <th scope="col">Tytuł</th>
+            <th style="cursor: pointer" onclick="sortBy('title')" scope="col">Tytuł</th>
             <th scope="col">Treść</th>
-            <th scope="col">Kategoria</th>
-            <th scope="col">Data dodania</th>
-            <th scope="col">Użytkownik</th>
+            <th style="cursor: pointer" onclick="sortBy('category')" scope="col">Kategoria</th>
+            <th style="cursor: pointer" onclick="sortBy('date')" scope="col">Data</th>
+            <th style="cursor: pointer" onclick="sortBy('user')" scope="col">Użytkownik</th>
         </tr>
         </thead>
         <tbody id="tbody">
-<!--        <tr th:each="note, i: ${sharedNotes}">
-            <td th:text="${i.index}" />
-            <td th:text="${note.title}" />
-            <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis"  th:text="${note.content}"/>
-            <td  th:text="${note.category.name}"/>
-            <td  th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}"/>
-            <td  th:text="${note.author.firstName}+' '+${note.author.lastName}"/>
-        </tr>-->
         </tbody>
     </table>
 </div>
@@ -38,27 +30,53 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
 
-    const sharedNotes = /*[[${sharedNotes}]]*/ 'default';
+    const _sharedNotes = /*[[${sharedNotes}]]*/ 'default';
     const temporals = /*[[${temporals}]]*/ 'default';
     const content = ``;
+    let _sortedNotes = _sharedNotes
 
     const getTemplate = (note, index) => {
-        return `<tr>
+        return `
+        <tr>
             <td>${index}</td>
             <td>${note.title}</td>
             <td>${note.content}</td>
             <td>${note.category.name}</td>
             <td></td>
-            <td>${note.author.firstName}+' '+${note.author.lastName}</td>
-        </tr>`
+            <td>${note.author.firstName} ${note.author.lastName}</td>
+        </tr>
+        `
     }
 
-    sharedNotes.forEach((note, i)=>{
-        const el = getTemplate(note, i)
-        document.getElementById('tbody').insertAdjacentHTML("afterend", el)
-    })
+    const clearTbody = () => {
+        document.getElementById('tbody').innerHTML = ''
+    }
 
-    console.log(template)
+    const renderTableBody = () => {
+        clearTbody()
+        _sharedNotes.forEach((note, i)=>{
+            const el = getTemplate(note, i)
+            document.getElementById('tbody').insertAdjacentHTML("beforeend", el)
+        })
+    }
+    let _sortedByState = null;
+    let _asc = true;
+
+    const sortBy = (column)=>{
+        if(column === _sortedByState){
+            _asc = !_asc
+        }
+        _sortedByState = column
+        if(_asc){
+            _sortedNotes.sort((a,b) => (a[column] > b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0))
+        } else {
+            _sortedNotes.sort((a,b) => (a[column] < b[column]) ? 1 : ((b[column] < a[column]) ? -1 : 0))
+        }
+        renderTableBody()
+
+    }
+
+    renderTableBody()
 </script>
 
 </body>
