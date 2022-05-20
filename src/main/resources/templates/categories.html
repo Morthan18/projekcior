@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
 <body>
+<div th:insert="fragments/navbar :: navbar"></div>
 
         <tr th:each="category: ${categories}">
             <td th:text="${category.id}" />

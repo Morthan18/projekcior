@@ -1,27 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
 <body>
-<a href="index.html" th:href="@{/}">main Page</a>
 
 
+<div th:insert="fragments/navbar :: navbar"></div>
 
-    <div th:each="user : ${users}">
+<div class="p-5">
 
-        <a th:href="@{/admin/users/{id}(id = ${user.id})}">
-            <span>KLIKNIJ MNIE ;]</span>
-        </a>
-        <div th:text="${user.id}"></div>
-        <div th:text="${user.firstName}"></div>
-        <div th:text="${user.lastName}"></div>
-        <div th:text="${user.age}"></div>
-        <div th:text="${role}"></div>
-        <br><br>
-    </div>
+<div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-primary">Dodaj</button>
+</div>
 
+<div style="border: 1px solid #cecece; border-radius: 12px; overflow: hidden">
+<table class="table m-0">
+    <thead>
+    <tr>
+        <th class="px-3" scope="col">#</th>
+        <th scope="col">Imię</th>
+        <th scope="col">Nazwisko</th>
+        <th scope="col">Wiek</th>
+        <th scope="col">Rola</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user,iter : ${users}">
+        <td class="px-3" th:text="${iter.index}"></td>
+        <td th:text="${user.firstName}"></td>
+        <td th:text="${user.lastName}"></td>
+        <td th:text="${user.age}"></td>
+        <td th:text="${user.role}"></td>
+        <td><a th:href="@{/admin/users/{id}(id = ${user.id})}" class="btn btn-light">Edytuj</a></td>
+    </tr>
+    </tbody>
+</table>
 
+</div>
+
+</div>
 </body>
 </html>

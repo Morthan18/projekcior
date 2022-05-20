@@ -60,7 +60,7 @@ public class NotesController {
                 List.of()
         ));
 
-        var mav = new ModelAndView("notes");
+        var mav = new ModelAndView("redirect:/notes");
         mav.addObject("notes", noteRepository.findAll());
         return mav;
     }

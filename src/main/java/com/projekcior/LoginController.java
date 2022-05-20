@@ -72,11 +72,11 @@ public class LoginController {
     public ModelAndView register(@ModelAttribute("user") @Valid UserDto userDto, ModelAndView mav, HttpServletRequest req) {
         boolean userExist = userRepository.findByUsername(userDto.getUsername()).isPresent();
         if (userExist) {
-            mav.addObject("message", "An account for that username already exists.");
+            mav.addObject("error", "Użytkownik o takiej nazwie użytkownika już isnieje");
             return mav;
         }
         if (!userDto.getPassword().equals(userDto.getMatchingPassword())) {
-            mav.addObject("message", "Passwords doesnt match!");
+            mav.addObject("error", "Passwords doesnt match!");
             return mav;
         }
         userRepository.save(new User(
@@ -99,7 +99,7 @@ public class LoginController {
         HttpSession session = req.getSession(true);
         session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
 
-        return new ModelAndView("index", "user", userDto);
+        return new ModelAndView("redirect:/", "user", userDto);
     }
 
     @Value

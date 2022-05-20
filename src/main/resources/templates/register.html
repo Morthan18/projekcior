@@ -1,44 +1,120 @@
 <html>
+<head>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
+</head>
 <body>
-<h1>register</h1>
-<form action="/register" th:object="${user}" method="POST" enctype="utf8">
-    <div>
-        <label>first name</label>
-        <input th:field="*{firstName}"/>
-        <p th:each="error: ${#fields.errors('firstName')}"
-           th:text="${error}">Validation error</p>
-    </div>
-    <div>
-        <label>last name</label>
-        <input th:field="*{lastName}"/>
-        <p th:each="error : ${#fields.errors('lastName')}"
-           th:text="${error}">Validation error</p>
-    </div>
-    <div>
-        <label>username</label>
-        <input type="text" th:field="*{username}"/>
-        <p th:each="error : ${#fields.errors('username')}"
-           th:text="${error}">Validation error</p>
-    </div>
-    <div>
-        <label>password</label>
-        <input type="password" th:field="*{password}"/>
-        <p th:each="error : ${#fields.errors('password')}"
-           th:text="${error}">Validation error</p>
-    </div>
-    <div>
-        <label>confirm</label>
-        <input type="password" th:field="*{matchingPassword}"/>
-    </div>
-    <div>
-        <label>age</label>
-        <input type="number" th:field="*{age}"/>
-    </div>
-    <button type="submit">submit</button>
-</form>
 
-<p th:each="error : ${errors}"
-   th:text="${error.getDefaultMessage()}">Validation error</p>
-<p th:text="${message}"></p>
+<div class="login-background">
+
+    <div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
+        <div class="card-body p-4">
+            <h3 class="card-title text-center">Rejestracja</h3>
+            <form id="form" action="/register" th:object="${user}" method="POST" enctype="utf8">
+
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">Imię</label>
+                    <input th:field="*{firstName}"  type="text" class="form-control" id="firstName" name="username" autofocus="autofocus">
+                    <span id="error-firstName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label  for="lastName" class="form-label">Nazwisko</label>
+                    <input th:field="*{lastName}"  type="text" class="form-control" id="lastName" name="username">
+                    <span id="error-lastName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nazwa użytkownika</label>
+                    <input th:field="*{username}"  type="text" class="form-control" id="username" name="username">
+                    <span id="error-username" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Hasło</label>
+                    <input th:field="*{password}"  type="password" class="form-control" id="password" name="username">
+                    <span id="error-password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="matchingPassword"  class="form-label">Potwierdź hasło</label>
+                    <input th:field="*{matchingPassword}"  type="password" class="form-control" id="matchingPassword" name="username">
+                    <span id="error-matchingPassword" class="text-danger"></span>
+                    <span id="error-passwordMustMach" class="text-danger"></span>
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="age" class="form-label">Wiek</label>
+                    <input th:field="*{age}" type="number" min="10" class="form-control" id="age" name="username">
+                    <span id="error-age" class="text-danger"></span>
+                    <span id="error-ageNum" class="text-danger"></span>
+                </div>
+
+                <p class="text-danger" th:text="${error}"></p>
+
+
+                <div style="display: flex; justify-content: space-between">
+                    <a th:href="@{/}" class="btn btn-light">Strona główna</a>
+                    <div style="display: flex; justify-content: flex-end">
+                        <a th:href="@{/login}" class="btn btn-outline-primary mx-2">Zaloguj się</a>
+                        <input onclick="validate()" class="btn btn-primary" value="Zarejestruj się"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const validate = () => {
+        const fields = [
+            'firstName',
+            'lastName',
+            'username',
+            'password',
+            'matchingPassword',
+            'age'
+        ]
+        let isValid = true;
+        fields.forEach(name=>{
+            const fieldValue = document.getElementById(name).value
+            setErrorToField(name, '')
+            if(!fieldValue.trim()){
+                setErrorToField(name, 'Wartość jest wymagana')
+                isValid = false;
+            }
+        })
+        const passwordInput = document.getElementById('password').value
+        const matchingPasswordInput = document.getElementById('matchingPassword').value
+        const ageInput = document.getElementById('age').value
+
+        if(passwordInput!==matchingPasswordInput){
+            setErrorToField('passwordMustMach', 'Hasła muszą być identyczne')
+            isValid = false;
+        }
+
+        if(ageInput && parseInt(ageInput) < 10){
+            console.log(age)
+            setErrorToField('ageNum', 'Wiek musi być większy niż 10')
+            isValid = false;
+        }
+
+        console.log(ageInput)
+        console.log(passwordInput)
+        console.log(matchingPasswordInput)
+
+        if(isValid){
+            document.getElementById("form").submit();
+        }
+    }
+    const setErrorToField = (id, message) => {
+        const field = document.getElementById(`error-${id}`)
+        if(field){
+         field.innerHTML = `${message}`
+        }
+    }
+
+</script>
+
 </body>
 </html>

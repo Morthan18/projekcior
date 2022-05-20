@@ -37,7 +37,7 @@ public class CategoryController {
             return mav;
         }
 
-        var mav = new ModelAndView("categories");
+        var mav = new ModelAndView("redirect:/categories");
         categoryRepository.save(new Category(categoryDto.getName()));
         mav.addObject("categories", categoryRepository.findAll());
         return mav;
