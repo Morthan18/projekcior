@@ -63,6 +63,15 @@ public class NotesController {
         return mav;
     }
 
+    @GetMapping("/notes/{id}/delete")
+    ModelAndView deleteNote(@PathVariable long id) {
+        var mav = new ModelAndView("redirect:/notes");
+
+        noteRepository.deleteById(id);
+
+        return mav;
+    }
+
     @PostMapping("/notes/{id}")
     ModelAndView updateNote(@PathVariable long id, @ModelAttribute NoteDto noteDto) {
         var mav = new ModelAndView("editNote");

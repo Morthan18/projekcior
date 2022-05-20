@@ -35,6 +35,7 @@
                         <td th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}" />
                         <td><a th:href="@{/notes/share-note/{id}(id = ${note.id})}" class="btn btn-info">Udostepnij komus se</a></td>
                         <td><a th:href="@{/notes/{id}(id = ${note.id})}" class="btn btn-secondary">Edytuj</a></td>
+                        <td><a th:href="@{'/notes/' + ${note.id} + '/delete'}" class="btn btn-secondary">Usun</a></td>
                         <td></td>
                     </tr>
                     </tbody>
