@@ -85,14 +85,14 @@ public class LoginController {
                 userDto.getUsername(),
                 passwordEncoder.encode(userDto.getPassword()),
                 userDto.getAge(),
-                List.of(new Authority(userDto.getUsername(), "ROLE_USER"))
+                List.of(new Authority(userDto.getUsername(), "ROLE_FULL_USER"))
         ));
 
         var sc = SecurityContextHolder.getContext();
         var auth = new UsernamePasswordAuthenticationToken(
-                new org.springframework.security.core.userdetails.User(userDto.getUsername(), userDto.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER"))),
+                new org.springframework.security.core.userdetails.User(userDto.getUsername(), userDto.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_FULL_USER"))),
                 new CredentialsDto(userDto.getUsername(), userDto.getPassword()),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                List.of(new SimpleGrantedAuthority("ROLE_FULL_USER"))
         );
 
         sc.setAuthentication(auth);

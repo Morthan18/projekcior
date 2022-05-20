@@ -83,10 +83,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
-            userRepository.save(new User("Krzycho", "Snobko", "krzycho_jp_3000_PL", passwordEncoder().encode("123"), 24, List.of(new Authority("krzycho_jp_300_PL", "USER"))));
-            userRepository.save(new User("Krzycho", "ADMIN", "ADMINOS", passwordEncoder().encode("123"), 24, List.of(new Authority("ADMINOS", "ADMIN"))));
-            userRepository.save(new User("Krzycho", "Ograniczony ;/", "retarded", passwordEncoder().encode("123"), 24, List.of(new Authority("retarded", "LIMITED_USER"))));
-            userRepository.save(new User("Krzycho", "Fat", "mocny_full", passwordEncoder().encode("123"), 24, List.of(new Authority("mocny_full", "FULL_USER"))));
+            userRepository.save(new User("Krzycho", "Snobko", "krzycho_jp_3000_PL", passwordEncoder().encode("123"), 24, List.of(new Authority("krzycho_jp_3000_PL", "ROLE_FULL_USER"))));
+            userRepository.save(new User("Krzycho", "ADMIN", "ADMINOS", passwordEncoder().encode("123"), 24, List.of(new Authority("ADMINOS", "ROLE_ADMIN"))));
+            userRepository.save(new User("Krzycho", "Ograniczony ;/", "retarded", passwordEncoder().encode("123"), 24, List.of(new Authority("retarded", "ROLE_LIMITED_USER"))));
         }
     }
 }
