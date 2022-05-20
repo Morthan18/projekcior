@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:text="${user.id}"></div>
+<div th:text="${user.firstName}"></div>
+<div th:text="${user.lastName}"></div>
+<div th:text="${user.age}"></div>
+<div th:text="${user.role}"></div>
+
+    <select class="form-control" id="dropDownList">
+
+        <option
+                th:each="role : ${allRoles}"
+                th:value="${role}"
+                th:text="${role}"
+                th:selected="${role == user.role}"
+        ></option>
+    </select>
+    <input type="submit" value="Save Role">
+
+
+</body>
+</html>

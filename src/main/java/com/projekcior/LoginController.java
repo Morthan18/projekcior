@@ -85,7 +85,7 @@ public class LoginController {
                 userDto.getUsername(),
                 passwordEncoder.encode(userDto.getPassword()),
                 userDto.getAge(),
-                List.of(new Authority(userDto.getUsername(), "ROLE_FULL_USER"))
+                new Authority(userDto.getUsername(), "ROLE_FULL_USER")
         ));
 
         var sc = SecurityContextHolder.getContext();

@@ -19,16 +19,16 @@ public class User {
     String password;
     Integer age;
     boolean enabled;
-    @OneToMany(cascade = CascadeType.ALL)
-    List<Authority> authorities;
+    @ManyToOne(cascade = CascadeType.ALL)
+    Authority authority;
 
-    public User(String firstName, String lastName, String username, String password, Integer age, List<Authority> authorities) {
+    public User(String firstName, String lastName, String username, String password, Integer age, Authority authority) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.age = age;
         this.enabled = true;
-        this.authorities = authorities;
+        this.authority = authority;
     }
 }

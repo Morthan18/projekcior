@@ -11,13 +11,16 @@
 
     <div th:each="user : ${users}">
 
+        <a th:href="@{/admin/users/{id}(id = ${user.id})}">
+            <span>KLIKNIJ MNIE ;]</span>
+        </a>
         <div th:text="${user.id}"></div>
         <div th:text="${user.firstName}"></div>
         <div th:text="${user.lastName}"></div>
         <div th:text="${user.age}"></div>
+        <div th:text="${role}"></div>
         <br><br>
     </div>
-    <input type="submit" value="Save All">
 
 
 </body>
