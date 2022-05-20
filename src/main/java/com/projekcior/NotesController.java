@@ -14,16 +14,28 @@ import java.util.UUID;
 @Controller
 public class NotesController {
 
+    @RequestMapping("/")
+    public ModelAndView index() {
+        ModelAndView mav = new ModelAndView("index");
+        var allNotes = getAllNotes();
+        mav.addObject("notes", allNotes);
+        return mav;
+    }
+
     @RequestMapping(value = "notes", method = RequestMethod.GET)
     public ModelAndView messages() {
         ModelAndView mav = new ModelAndView("notes");
-        var allNotes = List.of(
-                new Note(UUID.randomUUID(),"Ważne ogłoszenie", "Legia to kurczak.", null, LocalDate.now(), new Category(UUID.randomUUID(),"Sport")),
-                new Note(UUID.randomUUID(),"Ciekawostka",
+        var allNotes = getAllNotes();
+        mav.addObject("notes", allNotes);
+        return mav;
+    }
+
+    private List<Note> getAllNotes() {
+        return List.of(
+                new Note(UUID.randomUUID(), "Ważne ogłoszenie", "Legia to kurczak.", null, LocalDate.now(), new Category(UUID.randomUUID(), "Sport")),
+                new Note(UUID.randomUUID(), "Ciekawostka",
                         "Kury mają doskonałą pamięć. Potrafią zapamiętać i rozróżnić ponad 100 twarzy innych kur oraz rozpoznać je nawet po kilku miesiącach rozłąki..",
                         "https://www.otwarteklatki.pl/blog/20-ciekawostek-o-kurach", LocalDate.now(), new Category(UUID.randomUUID(), "Rolnictwo"))
         );
-        mav.addObject("notes", allNotes);
-        return mav;
     }
 }
