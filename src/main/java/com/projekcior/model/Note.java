@@ -10,7 +10,6 @@ public class Note {
     UUID id;
     String title;
     String content;
-    String link;
     LocalDate creationDate;
     Category category;
 }

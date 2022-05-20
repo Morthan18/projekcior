@@ -48,6 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
                         "/login.html",
                         "/register").permitAll()
                 .and()
+                .anonymous()
+                .and()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()
                 .formLogin()

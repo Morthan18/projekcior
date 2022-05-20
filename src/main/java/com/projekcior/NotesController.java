@@ -32,10 +32,10 @@ public class NotesController {
 
     private List<Note> getAllNotes() {
         return List.of(
-                new Note(UUID.randomUUID(), "Ważne ogłoszenie", "Legia to kurczak.", null, LocalDate.now(), new Category(UUID.randomUUID(), "Sport")),
+                new Note(UUID.randomUUID(), "Ważne ogłoszenie", "Legia to kurczak.", LocalDate.now(), new Category(UUID.randomUUID(), "Sport")),
                 new Note(UUID.randomUUID(), "Ciekawostka",
                         "Kury mają doskonałą pamięć. Potrafią zapamiętać i rozróżnić ponad 100 twarzy innych kur oraz rozpoznać je nawet po kilku miesiącach rozłąki..",
-                        "https://www.otwarteklatki.pl/blog/20-ciekawostek-o-kurach", LocalDate.now(), new Category(UUID.randomUUID(), "Rolnictwo"))
+                        LocalDate.now(), new Category(UUID.randomUUID(), "Rolnictwo"))
         );
     }
 }
