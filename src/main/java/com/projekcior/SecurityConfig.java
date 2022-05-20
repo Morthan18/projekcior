@@ -85,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Appl
         if (event instanceof ContextRefreshedEvent) {
             var user = userRepository.save(new User("Krzycho", "Snobko", "krzycho_jp_3000_PL", passwordEncoder().encode("123"), 24, new Authority("krzycho_jp_3000_PL", "ROLE_FULL_USER")));
             var admin = userRepository.save(new User("Krzycho", "ADMIN", "ADMINOS", passwordEncoder().encode("123"), 24, new Authority("ADMINOS", "ROLE_ADMIN")));
-            var retard = userRepository.save(new User("Krzycho", "Ograniczony ;/", "retarded", passwordEncoder().encode("123"), 24, new Authority("retarded", "ROLE_LIMITED_USER")));
+            var retard = userRepository.save(new User("Krzycho", "Ograniczony ;/", "organiczony_z_gury", passwordEncoder().encode("123"), 24, new Authority("retarded", "ROLE_LIMITED_USER")));
 
             var category = categoryRepository.save(new Category("Ciekawostki"));
             categoryRepository.save(new Category("Lista zakupuw"));
