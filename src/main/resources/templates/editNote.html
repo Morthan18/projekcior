@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
     <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
-<body>
+<body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
+<div th:insert="fragments/navbar :: navbar"></div>
+
 <div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
     <div class="card-body p-4">
-        <h3 class="card-title text-center">Rejestracja</h3>
+        <h3 class="card-title text-center">Edycja</h3>
 
         <form id="form" th:action="@{/notes/{id}(id = ${noteDto.id})}" th:object="${noteDto}" method="POST" enctype="utf8">
 
             <div class="mb-3">
                 <label for="title" class="form-label">Tytuł</label>
-                <input th:field="*{title}"
+                <input maxlength="20" minlength="3" th:field="*{title}"
                        type="text" class="form-control" id="title"
                        autofocus="autofocus">
             </div>
             <div class="mb-3">
                 <label for="content" class="form-label">Treść</label>
-                <input th:field="*{content}"
+                <textarea  maxlength="255" th:field="*{content}"
                        type="text" class="form-control" id="content"
-                       autofocus="autofocus">
+                       autofocus="autofocus"></textarea>
             </div>
 
             <div class="mb-3">

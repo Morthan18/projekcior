@@ -13,12 +13,12 @@
 
             <div class="mb-3">
                 <label for="title" class="form-label">Tytuł</label>
-                <input th:field="*{title}" type="text" class="form-control" id="title" name="title" autofocus="autofocus">
+                <input maxlength="20" minlength="3" th:field="*{title}" type="text" class="form-control" id="title" name="title" autofocus="autofocus">
             </div>
 
             <div class="mb-3">
                 <label for="content" class="form-label">Treść</label>
-                <textarea th:field="*{content}" type="text" class="form-control" id="content" name="content" autofocus="autofocus"></textarea>
+                <textarea  maxlength="255" th:field="*{content}" type="text" class="form-control" id="content" name="content" autofocus="autofocus"></textarea>
             </div>
 
             <div class="mb-3">

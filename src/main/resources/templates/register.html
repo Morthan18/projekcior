@@ -15,24 +15,31 @@
                     <label for="firstName" class="form-label">Imię</label>
                     <input th:field="*{firstName}"  type="text" class="form-control" id="firstName" name="username" autofocus="autofocus">
                     <span id="error-firstName" class="text-danger"></span>
+                    <span id="error-firstNameLength" class="text-danger"></span>
+                    <span id="error-firstNameUpper" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label  for="lastName" class="form-label">Nazwisko</label>
                     <input th:field="*{lastName}"  type="text" class="form-control" id="lastName" name="username">
                     <span id="error-lastName" class="text-danger"></span>
+                    <span id="error-lastNameLength" class="text-danger"></span>
+                    <span id="error-lastNameUpper" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label for="username" class="form-label">Nazwa użytkownika</label>
                     <input th:field="*{username}"  type="text" class="form-control" id="username" name="username">
                     <span id="error-username" class="text-danger"></span>
+                    <span id="error-usernameLength" class="text-danger"></span>
+                    <span id="error-usernameUpper" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Hasło</label>
                     <input th:field="*{password}"  type="password" class="form-control" id="password" name="username">
                     <span id="error-password" class="text-danger"></span>
+                    <span id="error-passwordLength" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
@@ -66,7 +73,37 @@
 </div>
 
 <script>
+
+    const clearAllErrors = () => {
+        const fields = [
+            'firstName',
+            'lastName',
+            'username',
+            'password',
+            'matchingPassword',
+            'age',
+            'firstNameLength',
+            'firstNameUpper',
+            'lastNameLength',
+            'lastNameUpper',
+            'usernameLength',
+            'usernameUpper',
+            'passwordLength',
+            'passwordMustMach',
+            'ageNum'
+        ]
+        fields.forEach(id=>{
+            const field = document.getElementById(`error-${id}`)
+            field.innerHTML = ''
+        })
+    }
+
+    const startsWithCapital = (word) => {
+        return word.charAt(0) === word.charAt(0).toUpperCase()
+    }
+
     const validate = () => {
+        clearAllErrors()
         const fields = [
             'firstName',
             'lastName',
@@ -80,28 +117,60 @@
             const fieldValue = document.getElementById(name).value
             setErrorToField(name, '')
             if(!fieldValue.trim()){
-                setErrorToField(name, 'Wartość jest wymagana')
+                setErrorToField(name, ' Wartość jest wymagana.')
                 isValid = false;
             }
         })
+        const firstName = document.getElementById('firstName').value
+        const lastName = document.getElementById('lastName').value
+        const username = document.getElementById('username').value
         const passwordInput = document.getElementById('password').value
         const matchingPasswordInput = document.getElementById('matchingPassword').value
         const ageInput = document.getElementById('age').value
 
         if(passwordInput!==matchingPasswordInput){
-            setErrorToField('passwordMustMach', 'Hasła muszą być identyczne')
+            setErrorToField('passwordMustMach', ' Hasła muszą być identyczne.')
             isValid = false;
         }
 
-        if(ageInput && parseInt(ageInput) < 10){
-            console.log(age)
-            setErrorToField('ageNum', 'Wiek musi być większy niż 10')
+        if(passwordInput<5){
+            setErrorToField('passwordLength', ' Hasła musi być dłuższe niż 5 znaków.')
             isValid = false;
         }
 
-        console.log(ageInput)
-        console.log(passwordInput)
-        console.log(matchingPasswordInput)
+        if(ageInput && parseInt(ageInput) < 17){
+            setErrorToField('ageNum', ' Wiek musi być większy niż 17.')
+            isValid = false;
+        }
+
+        if(firstName.length<3 || firstName.length>20){
+            setErrorToField('firstNameLength', ' Imię musi być dłuższe niż 3 i krótsze niż 20 znaków.')
+            isValid = false;
+        }
+        if(username.length<3 || username.length>20){
+            setErrorToField('usernameLength', ' Nazwa użytkownika musi być dłuższa niż 3 i krótsza niż 20 znaków.')
+            isValid = false;
+        }
+
+        if(lastName.length<3 || lastName.length>20){
+            setErrorToField('lastNameLength', ' Nazwisko musi być dłuższe niż 3 i krótsze niż 20 znaków.')
+            isValid = false;
+        }
+
+        if(!startsWithCapital(firstName)){
+            setErrorToField('firstNameUpper', ' Imię musi zaczynać się z wielkiej litery.')
+            isValid = false;
+        }
+        if(!startsWithCapital(lastName)){
+            setErrorToField('lastNameUpper', ' Nazwisko musi zaczynać się z wielkiej litery.')
+            isValid = false;
+        }
+        if(!startsWithCapital(username)){
+            setErrorToField('usernameUpper', ' Nazwa użytkownika  musi zaczynać się z wielkiej litery.')
+            isValid = false;
+        }
+
+
 
         if(isValid){
             document.getElementById("form").submit();

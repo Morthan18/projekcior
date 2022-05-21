@@ -15,7 +15,7 @@
         <form th:object="${categoryDto}" th:action="@{/categories}" method="post">
             <div class="mb-3">
                 <label for="name" class="form-label">Nazwa kategori</label>
-                <input th:field="*{name}" type="text" class="form-control" id="name" name="name" autofocus="autofocus">
+                <input maxlength="20" minlength="3" th:field="*{name}" type="text" class="form-control" id="name" name="name" autofocus="autofocus">
             </div>
             <p class="text-danger" th:text="${error}"></p>
             <div class="d-flex justify-content-end">
