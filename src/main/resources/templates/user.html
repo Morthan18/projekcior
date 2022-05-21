@@ -9,22 +9,23 @@
 
 <div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
     <div class="card-body p-4">
-        <h3 class="card-title text-center">Dodaj kategorię</h3>
+        <h3 class="card-title text-center">Edycja użytkownika</h3>
         <form th:object="${userDto}" th:action="@{'/admin/users/' + ${userDto.id} + '/update'}" method="post">
             <div class="mb-3">
-                <label for="firstName" class="form-label">Nazwa kategori</label>
+                <label for="firstName" class="form-label">Imię</label>
                 <input readonly th:value="${userDto.firstName}" type="text" class="form-control" id="firstName" name="firstName">
             </div>
             <div class="mb-3">
-                <label for="lastName" class="form-label">Nazwa kategori</label>
+                <label for="lastName" class="form-label">Nazwisko</label>
                 <input readonly th:value="${userDto.lastName}" type="text" class="form-control" id="lastName" name="lastName">
             </div>
             <div class="mb-3">
-                <label for="age" class="form-label">Nazwa kategori</label>
+                <label for="age" class="form-label">Wiek</label>
                 <input readonly th:value="${userDto.age}" type="number" class="form-control" id="age" name="age">
             </div>
             <div class="mb-3">
-                <select th:field="*{role}" class="form-control" id="dropDownList">
+                <label for="role" class="form-label">Rola</label>
+                <select th:field="*{role}" class="form-control" id="role">
 
                     <option
                             th:each="role : ${allRoles}"
