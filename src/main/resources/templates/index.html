@@ -10,5 +10,56 @@
 <body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
 
 <div th:insert="fragments/navbar :: navbar"></div>
+
+<div  class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
+    <div class="card-body p-4" sec:authorize="!isAuthenticated()">
+        <h3 class="card-title text-center " style="font-variant: small-caps">Witaj na stronie</h3>
+        <p class="my-4 text-center">
+            Aby kożystać z aplikacji zaloguj się do niej, lub jeśli nie posiadasz konta, zarejestruj się.
+        </p>
+        <div style="display: flex; justify-content: center">
+            <a th:href="@{/register}" class="btn btn-outline-primary mx-2">Zarejestruj się</a>
+            <a th:href="@{/login}" type="submit" class="btn btn-primary">Zaloguj się</a>
+        </div>
+    </div>
+    <div class="card-body p-4" sec:authorize="isAuthenticated()">
+        <h3 class="card-title text-center" style="font-variant: small-caps">Witaj<span id="userFullName"></span></h3>
+        <p class="my-4 text-center">
+            Miłego kożystania ze strony internetowej :)
+        </p>
+    </div>
+</div>
+
+<script th:inline="javascript">
+
+
+    const getCookie = ()=> {
+        let name = "userFullName=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    const loadUserFullName = () => {
+        const userFullName =  getCookie()
+        if(userFullName){
+            const el = document.getElementById(userFullName)
+            el.innerText = ', '+userFullName
+        }
+    }
+
+    loadUserFullName()
+
+</script>
+
 </body>
 </html>

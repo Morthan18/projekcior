@@ -39,7 +39,6 @@
                     >Udostepnione</a>
                 </li>
             </ul>
-            <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-outline-primary mx-2">Logowanie</a>
             <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="btn btn-outline-primary mx-2">Wyloguj</a>
         </div>
     </div>
