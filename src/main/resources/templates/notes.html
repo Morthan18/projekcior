@@ -22,6 +22,8 @@
 <h1 class="text-danger"  th:text="${error}"></h1>
         <div class="p-5">
 
+            <div style="margin: auto; width: 800px" id="confirmDelete"></div>
+
             <div class="d-flex justify-content-end pb-3">
                 <a class="btn btn-primary" th:href="@{/create-note}">Dodaj</a>
             </div>
@@ -50,20 +52,6 @@
                     </tr>
                     </thead>
                     <tbody id="tbody">
-<!--                    <tr th:each="note, i: ${notes}">-->
-<!--                        <td th:text="${i.index}" />-->
-<!--                        <td th:text="${note.title}" />-->
-<!--                        <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis" th:text="${note.content}" />-->
-<!--                        <td th:text="${note.category.name}" />-->
-<!--                        <td th:text="${note.link}" />-->
-<!--                        <td th:text="${#temporals.format(note.creationDate, 'dd-MM-yyyy')}" />-->
-<!--                        <td>-->
-<!--                            <a th:href="@{/notes/share-note/{id}(id = ${note.id})}" class="btn btn-light">Udostepnij</a>-->
-<!--                            <a th:href="@{/notes/{id}(id = ${note.id})}" class="btn btn-light">Edytuj</a>-->
-<!--                            <a th:href="@{'/notes/' + ${note.id} + '/delete'}" class="btn btn-light">Usuń</a>-->
-<!--                        </td>-->
-
-<!--                    </tr>-->
                     </tbody>
                 </table>
             </div>
@@ -99,6 +87,26 @@
         return sort ? JSON.parse(sort) : false
     }
 
+    const cancelNote = () => {
+        const el = document.getElementById('confirmDelete')
+        el.innerText = ''
+    }
+
+    const confirmDelete = (id, title) => {
+        cancelNote()
+        const el = document.getElementById('confirmDelete')
+        const confirmEl  = `
+        <div class="card bg-white p-4" style="width: 800px">
+            <h3 class="text-center">Czy na pewno chcesz usnąć notatkę o tytule: <br> ${title}</h3>
+            <div class="d-flex justify-content-center mt-4">
+                <a href="/notes/${id}/delete" class="btn btn-outline-danger mx-1" onclick="cancelNote()">Usuń</a>
+               <button class="btn btn-primary mx-1" onclick="cancelNote()">Anuluj</button>
+            </div>
+        </div>
+        `
+        el.insertAdjacentHTML("beforeend",confirmEl )
+    }
+
 
     const getTemplate = (note, index) => {
         return `
@@ -112,7 +120,8 @@
                 <a href="/notes/share-note/${note.id}" class="btn btn-light">Udostepnij</a>
                 <button onclick="copyLink('${note.link}', '${note.id}')" id="link-${note.id}" class="btn btn-light">Link do udostępniania</button>
                 <a href="/notes/${note.id}" class="btn btn-light">Edytuj</a>
-                <a href="/notes/${note.id}/delete" class="btn btn-light">Usuń</a>
+                <button onclick="confirmDelete('${note.id}', '${note.title}')" id="link-${note.id}" class="btn btn-light">Usuń</button>
+<!--                <a href="/notes/${note.id}/delete" class="btn btn-light">Usuń</a>-->
              </td>
         </tr>
         `
