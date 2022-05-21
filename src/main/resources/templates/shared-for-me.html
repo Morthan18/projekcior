@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
+    <style>
+        .sortIcon{
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        .visible{
+            visibility: visible;
+            transition: all 0.3s ease-in-out;
+        }
+        .desc{
+            transform: rotate(180deg);
+        }
+    </style>
 </head>
 <body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
 <div th:insert="fragments/navbar :: navbar"></div>
@@ -14,11 +27,23 @@
         <thead>
         <tr>
             <th class="px-3" scope="col">#</th>
-            <th style="cursor: pointer" onclick="sortBy('title')" scope="col">Tytuł</th>
+            <th style="cursor: pointer" onclick="sortBy('title')" scope="col">
+                Tytuł
+                <img class="sortIcon" id="sort-icon-title" alt="down" height="18px" width="18px" src="/img/down.svg">
+            </th>
             <th scope="col">Treść</th>
-            <th style="cursor: pointer" onclick="sortBy('category')" scope="col">Kategoria</th>
-            <th style="cursor: pointer" onclick="sortBy('date')" scope="col">Data</th>
-            <th style="cursor: pointer" onclick="sortBy('user')" scope="col">Użytkownik</th>
+            <th style="cursor: pointer" onclick="sortBy('category')" scope="col">
+                Kategoria
+                <img class="sortIcon" id="sort-icon-category" alt="down" height="18px" width="18px" src="/img/down.svg">
+            </th>
+            <th style="cursor: pointer" onclick="sortBy('date')" scope="col">
+                Data
+                <img class="sortIcon" id="sort-icon-date" alt="down" height="18px" width="18px" src="/img/down.svg">
+            </th>
+            <th style="cursor: pointer" onclick="sortBy('user')" scope="col">
+                Użytkownik
+                <img class="sortIcon" id="sort-icon-user" alt="down" height="18px" width="18px" src="/img/down.svg">
+            </th>
         </tr>
         </thead>
         <tbody id="tbody">
@@ -32,17 +57,25 @@
 
     const _sharedNotes = /*[[${sharedNotes}]]*/ 'default';
     const temporals = /*[[${temporals}]]*/ 'default';
+    const user = /*[[${session}]]*/ 'default';
+    const _username = user.SPRING_SECURITY_CONTEXT.authentication.name
     const content = ``;
     let _sortedNotes = _sharedNotes
+
+    const getSortFromStore = () => {
+        const sort = localStorage.getItem('sortShared')
+        return sort ? JSON.parse(sort) : false
+    }
+
 
     const getTemplate = (note, index) => {
         return `
         <tr>
             <td>${index}</td>
             <td>${note.title}</td>
-            <td>${note.content}</td>
+            <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">${note.content}</td>
             <td>${note.category.name}</td>
-            <td></td>
+            <td>${note.creationDate}</td>
             <td>${note.author.firstName} ${note.author.lastName}</td>
         </tr>
         `
@@ -59,24 +92,90 @@
             document.getElementById('tbody').insertAdjacentHTML("beforeend", el)
         })
     }
-    let _sortedByState = null;
+    let _sortedByState = 'title'
     let _asc = true;
 
-    const sortBy = (column)=>{
-        if(column === _sortedByState){
+    const loadSortFromStore = () =>{
+        const sort = getSortFromStore()
+        if(sort){
+            const userSort = sort.find(s=>s.user === _username)
+            if(userSort){
+                _asc = userSort.value.asc
+                _sortedByState = userSort.value.column
+            }
+        }
+        sortBy(_sortedByState, true)
+    }
+
+    const sortBy = (column, skipColumn = false)=>{
+        if(column === _sortedByState && !skipColumn){
             _asc = !_asc
         }
         _sortedByState = column
-        if(_asc){
-            _sortedNotes.sort((a,b) => (a[column] > b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0))
-        } else {
-            _sortedNotes.sort((a,b) => (a[column] < b[column]) ? 1 : ((b[column] < a[column]) ? -1 : 0))
+
+        setSortIcon(column, _asc)
+
+        if(column==='category'){
+            if(_asc){
+                _sortedNotes.sort((a,b) => (a[column].name > b[column].name) ? 1 : ((b[column].name > a[column].name) ? -1 : 0))
+            } else {
+                _sortedNotes.sort((a,b) => (a[column].name < b[column].name) ? 1 : ((b[column].name < a[column].name) ? -1 : 0))
+            }
+        } else{
+            if(_asc){
+                _sortedNotes.sort((a,b) => (a[column] > b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0))
+            } else {
+                _sortedNotes.sort((a,b) => (a[column] < b[column]) ? 1 : ((b[column] < a[column]) ? -1 : 0))
+            }
         }
         renderTableBody()
-
+        setSortToStore(column, _asc)
     }
 
+    const setSortIcon = (column, asc) =>{
+        hideAllSortIcons()
+        const icon = document.getElementById('sort-icon-'+column)
+        if(!asc){
+            icon.classList.add('desc')
+        }
+        icon.classList.add('visible')
+    }
+
+    const hideAllSortIcons = () =>{
+        const columns = ['title', 'category', 'date', 'user']
+        columns.forEach(c=>{
+            const icon = document.getElementById('sort-icon-'+c)
+            icon.classList.remove('visible')
+            icon.classList.remove('desc')
+        })
+    }
+
+    const setSortToStore = (column, asc) => {
+        const sort = getSortFromStore()
+        let newSort = sort ? sort : []
+        if(sort) {
+            const isUser = sort.find(s=>s.user === _username )
+            if(isUser) {
+                newSort = sort.map(s=>{
+                    if(s.user === _username){
+                        s.value = {
+                            column:column,
+                            asc:asc
+                        }
+                        return s
+                    }
+                    return s
+                })
+            } else{
+                newSort.push({user:_username, value:{column:column, asc:asc}})
+            }
+        }
+        localStorage.setItem('sortShared', JSON.stringify(newSort))
+    }
+
+
     renderTableBody()
+    loadSortFromStore()
 </script>
 
 </body>
