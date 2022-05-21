@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}"/>
 </head>
-<body>
-<tr>
-    <td th:text="${noteDto.title}" />
-    <td th:text="${noteDto.content}" />
-</tr>
+<body th:style="'background: url(/img/main-backbround.svg) no-repeat center center fixed;'">
+<div th:insert="fragments/navbar :: navbar"></div>
+
+
+<div class="card" style="max-width: 800px; margin: auto; margin-top: 200px">
+    <div class="card-body p-4">
+        <h3 class="card-title text-center">Notatka</h3>
+        <p  style="font-variant: small-caps; font-size: 1.3em;" th:text="${noteDto.title}"></p>
+        <p th:text="${noteDto.content}"></p>
+    </div>
+</div>
 </body>
 </html>
