@@ -3,12 +3,18 @@ package com.projekcior;
 import com.projekcior.model.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -24,16 +30,31 @@ public class NotesController {
     private final UserRepository userRepository;
 
     @RequestMapping("/")
-    public ModelAndView index() {
+    public ModelAndView index(HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("index");
+
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || auth instanceof AnonymousAuthenticationToken) {
+            var cookie = new Cookie("userFirstName",null);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+
+            var cookie2 = new Cookie("userLastName",null);
+            cookie2.setMaxAge(0);
+            response.addCookie(cookie2);
+        }
 
         return mav;
     }
 
     @RequestMapping("/successLogin")
-    public ModelAndView successLogin() {
+    public ModelAndView successLogin(HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("redirect:/");
 
+        var user = userRepository.findAuthenticatedUser().get();
+
+        response.addCookie(new Cookie("userFirstName", user.getFirstName()));
+        response.addCookie(new Cookie("userLastName", user.getLastName()));
         return mav;
     }
 
